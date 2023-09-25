@@ -1,6 +1,7 @@
 import { client } from "./util.js";
 import "dotenv/config";
 import axios from "axios";
+import { Variables } from "camunda-external-task-client-js";
 
 export default function () {
   client.subscribe(
@@ -11,15 +12,15 @@ export default function () {
       const { variables } = task;
       const url = "http://localhost:" + process.env.PORT + "/cuti";
 
-      console.log(url);
-
       const jsonData = {
-        NIP: variables.get("id"),
-        tanggal: variables.get("date"),
-        alasan: variables.get("reason"),
+        id: variables.get("id"),
+        date: variables.get("date"),
+        reason: variables.get("reason"),
       };
 
-      axios
+      const responseStatus = new Variables();
+
+      await axios
         .post(url, jsonData, {
           headers: {
             "Content-Type": "application/json",
@@ -27,12 +28,14 @@ export default function () {
         })
         .then((response) => {
           console.log("Response data:", response.data);
+          responseStatus.set("responseStatus", "success");
         })
         .catch((error) => {
           console.error("Error:", error.message);
+          responseStatus.set("responseStatus", "fail");
         });
 
-      await taskService.complete(task);
+      await taskService.complete(task, responseStatus);
     }
   );
 }
