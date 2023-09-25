@@ -1,0 +1,13 @@
+{
+  "u1nf03ie": {
+    "id": "employee1",
+    "name": "Employee 1",
+    "email": "radenrifqirahman@gmail.com",
+    "supervisorKey": "feujoq93"
+  },
+  "feujoq93": {
+    "id": "supervisor1",
+    "name": "Supervisor 1",
+    "email": "13520166@std.stei.itb.ac.id"
+  }
+}

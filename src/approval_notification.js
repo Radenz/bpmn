@@ -4,7 +4,7 @@ import { client } from "./util.js";
 
 export default function () {
   client.subscribe(
-    "sendApplicationNotification",
+    "sendApprovalNotification",
     async function ({ task, taskService }) {
       const employeeName = task.variables.get("name");
       /**
@@ -15,7 +15,7 @@ export default function () {
       );
 
       const employee = employees.length > 0 ? employees[0] : null;
-      if (employee) await notifySupervisor(employee);
+      if (employee) await notifyApplicant(employee);
 
       await taskService.complete(task);
     }
@@ -23,16 +23,14 @@ export default function () {
 }
 
 /**
- * Sends an email to employee's supervisor's email
- * regarding leave request
+ * Sends an email to employee's email
+ * regarding leave request approval
  * @param {Employee} employee
  */
-async function notifySupervisor(employee) {
-  const { supervisorKey } = employee;
-  const supervisor = EMPLOYEE_STORE.get(supervisorKey);
-  const { email } = supervisor;
+async function notifyApplicant(employee) {
+  const { email } = employee;
 
-  const subject = `Pengajuan Cuti ${employee.name}`;
-  const body = `${employee.name} ingin mengajukan cuti.`;
+  const subject = `Persetujuan Pengajuan Cuti ${employee.name}`;
+  const body = `Pengajuan cuti atas nama ${employee.name} telah disetujui.`;
   await sendTextEmail(email, subject, body);
 }
