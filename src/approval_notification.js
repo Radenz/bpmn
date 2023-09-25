@@ -1,17 +1,20 @@
 import { sendTextEmail } from "./mailer.js";
-import { EMPLOYEE_STORE, SUPERVISOR_STORE } from "./store.js";
+import { EMPLOYEE_STORE } from "./store.js";
 import { client } from "./util.js";
 
 export default function () {
   client.subscribe(
     "sendApprovalNotification",
     async function ({ task, taskService }) {
-      const employeeName = task.variables.get("name");
+      console.log("[?] sendApprovalNotification Called");
+
+      const employeeId = task.variables.get("id");
+
       /**
        * @type {Employee[]}
        */
       const employees = EMPLOYEE_STORE.where(
-        (employee) => employee.name === employeeName
+        (employee) => employee.id === employeeId
       );
 
       const employee = employees.length > 0 ? employees[0] : null;

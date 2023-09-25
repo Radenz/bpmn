@@ -1,35 +1,38 @@
 import { client } from "./util.js";
-import 'dotenv/config';
+import "dotenv/config";
 import axios from "axios";
 
 export default function () {
-    client.subscribe(
-        "menyimpanInformasiCutiKaryawan",
-        async function ({ task, taskService }) {
-            const variables = task.variables;
-            const url = "http://localhost:" + process.env.PORT + "/cuti";
+  client.subscribe(
+    "menyimpanInformasiCutiKaryawan",
+    async function ({ task, taskService }) {
+      console.log("[?] menyimpanInformasiCutiKaryawan Called");
 
-            console.log(url);
+      const { variables } = task;
+      const url = "http://localhost:" + process.env.PORT + "/cuti";
 
-            const jsonData = {
-                NIP: variables.get("nip"),
-                tanggal: variables.get("tanggal"),
-                alasan: variables.get("alasan"),
-            }
+      console.log(url);
 
-            axios.post(url, jsonData, {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                console.log('Response data:', response.data);
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-            });
+      const jsonData = {
+        NIP: variables.get("id"),
+        tanggal: variables.get("date"),
+        alasan: variables.get("reason"),
+      };
 
-            await taskService.complete(task);
-        }
-    );
+      axios
+        .post(url, jsonData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("Response data:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+
+      await taskService.complete(task);
+    }
+  );
 }

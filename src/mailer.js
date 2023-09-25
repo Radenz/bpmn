@@ -12,6 +12,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendTextEmail(destination, subject, body) {
+  console.log("[?] Sending mail to", destination);
   await transporter.sendMail({
     from: `No Reply <${process.env.GMAIL_EMAIL}>`,
     to: destination,
