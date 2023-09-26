@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post("/cuti", (req, res) => {
 
     const reqData = req.body;
-    const filename = 'data.json';
+    const filename = 'src/store/data.json';
 
     fs.readFile(filename, 'utf8', function readFileCallback(err, strData){
 
